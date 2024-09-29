@@ -1,0 +1,17 @@
+[project]
+name = "cbis-ddsm-dataloader"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "matplotlib>=3.9.2",
+    "numpy>=2.1.1",
+    "opencv-python-headless>=4.10.0.84",
+    "pandas>=2.2.3",
+    "pillow>=10.4.0",
+    "pydicom>=3.0.1",
+    "requests>=2.32.3",
+    "shapely>=2.0.6",
+    "tqdm>=4.66.5",
+]
