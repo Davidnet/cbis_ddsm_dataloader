@@ -2,6 +2,7 @@ import argparse
 import json
 import os
 import tarfile
+from pathlib import Path
 
 from utils.ddsm_downloader import CBISDDSMDownloader
 from utils.ddsm_png_converter import CBISDDSMConverter
@@ -10,8 +11,14 @@ from utils.ddsm_preprocessor import CBISDDSMPreprocessor
 
 def create_tar(folder_path, output_filename):
     with tarfile.open(output_filename, "w") as tar:
-        # Add the folder to the tar file
-        tar.add(folder_path, arcname=os.path.basename(folder_path))
+        for root, dirs, files in os.walk(folder_path):
+            for file in files:
+                if not file.endswith(".png"):
+                    continue
+                    # Get the full path of the file
+                full_path = os.path.join(root, file)
+                # Add the file to the tar archive while preserving the directory structure
+                tar.add(full_path, arcname=os.path.relpath(full_path, folder_path))
 
 
 parser = argparse.ArgumentParser(
@@ -64,5 +71,7 @@ preprocessor = CBISDDSMPreprocessor(
     (config["mass_test_csv"], config["calc_test_csv"]),
 )
 preprocessor.start()
-
+Path(args.output).parent.mkdir(
+    parents=True, exist_ok=True
+)  # Create parent directory if it doesn't exist
 create_tar(config["download_path"], args.output)
